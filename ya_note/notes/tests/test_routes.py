@@ -1,10 +1,16 @@
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yanote.settings")
+django.setup()
+
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from models import Note
+from notes.models import Note
 
 User = get_user_model()
 
