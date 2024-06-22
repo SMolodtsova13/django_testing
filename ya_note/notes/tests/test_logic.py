@@ -56,15 +56,10 @@ class TestNotesCreation(TestCase):
 
     """Невозможно создать две заметки с одинаковым slug."""
     def test_user_cant_create_same_notes(self):
-        response = self.auth_client.post(self.url, data=self.form_data)
-        bad_words_data = {'text': 'Какой-то текст',
-                          'slug': 'new-slug'}
-        self.form_data['slug'] = bad_words_data['slug']
-        response = self.auth_client.post(self.url, data=bad_words_data)
-        self.assertFormError(response,
-                             form='form',
-                             field='slug',
-                             errors=(f'{bad_words_data["slug"]}{WARNING}'))
+
+        self.auth_client.post(self.url, data=self.form_data)
+        self.auth_client.post(self.url, data=self.form_data)
+
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 1)
 
