@@ -25,7 +25,7 @@ class TestNotesCreation(TestCase):
             'title': 'Новый заголовок',
             'text': 'Новый текст',
             'slug': 'new-slug'
-            }
+        }
 
     """Анонимный пользователь не может создать заметку."""
     def test_anonymous_user_cant_create_notes(self):
@@ -101,7 +101,7 @@ class TestNoteEditDelete(TestCase):
             'title': 'Новый заголовок',
             'text': cls.NEW_NOTE_TEXT,
             'slug': 'new-slug'
-            }
+        }
 
     """Пользователь удалять свои заметки"""
     def test_author_can_delete_note(self):
