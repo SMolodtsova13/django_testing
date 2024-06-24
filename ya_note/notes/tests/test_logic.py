@@ -56,7 +56,6 @@ class TestNotesCreation(TestCase):
 
     """Невозможно создать две заметки с одинаковым slug."""
     def test_user_cant_create_same_notes(self):
-
         self.auth_client.post(self.url, data=self.form_data)
         self.auth_client.post(self.url, data=self.form_data)
 
