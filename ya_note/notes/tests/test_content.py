@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
-from django.test.utils import setup_test_environment
 from django.urls import reverse
 
 from notes.models import Note
@@ -32,7 +31,6 @@ class TestPagesNote(TestCase):
         cls.auth_client = Client()
         cls.auth_client.force_login(cls.user)
         cls.url = reverse('notes:list')
-        setup_test_environment()
 
     def test_note_in_list_for_author(self):
         """
