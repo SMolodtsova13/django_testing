@@ -6,9 +6,9 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
+from django.test.utils import setup_test_environment
 from django.urls import reverse
 
-from django.test.utils import setup_test_environment
 from notes.models import Note
 from notes.forms import NoteForm
 
@@ -33,22 +33,26 @@ class TestPagesNote(TestCase):
         cls.url = reverse('notes:list')
         setup_test_environment()
 
-    """Отдельная заметка передаётся на страницу со списком заметок
-    в списке object_list в словаре context."""
     def test_note_in_list_for_author(self):
+        """
+        Отдельная заметка передаётся на страницу со списком заметок
+        в списке object_list в словаре context.
+        """
         response = self.author_client.get(self.url)
         object_list = response.context['object_list']
         self.assertIn(self.note, object_list)
 
-    """В список заметок одного пользователя не попадают
-    заметки другого пользователя."""
     def test_note_not_in_list_for_another_user(self):
+        """
+        В список заметок одного пользователя не попадают
+        заметки другого пользователя.
+        """
         response = self.auth_client.get(self.url)
         object_list = response.context['object_list']
         self.assertNotIn(self.note, object_list)
 
-    """На страницы создания и редактирования заметки передаются формы."""
     def test_pages_contains_form(self):
+        """На страницы создания и редактирования заметки передаются формы."""
         urls = (
             ('notes:add', None),
             ('notes:edit', (self.note.slug,)),

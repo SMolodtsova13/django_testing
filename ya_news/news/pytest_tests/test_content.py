@@ -6,18 +6,23 @@ from news.forms import CommentForm
 
 from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
 
+
 @pytest.mark.django_db
 def test_anonymous_client_has_no_form(client, id_news_for_args):
-    """Анонимному пользователю недоступна форма для отправки
-    комментария на странице отдельной новости"""
+    """
+    Анонимному пользователю недоступна форма для отправки
+    комментария на странице отдельной новости
+    """
     url = reverse('news:detail', args=id_news_for_args)
     response = client.get(url)
     assert 'form' not in response.context
 
 
 def test_authorized_client_has_form(author_client, id_news_for_args):
-    """Авторизованному пользователю доступна форма для отправки комментария
-    на странице отдельной новости"""
+    """
+    Авторизованному пользователю доступна форма для отправки комментария
+    на странице отдельной новости
+    """
     url = reverse('news:detail', args=id_news_for_args)
     response = author_client.get(url)
     assert 'form' in response.context
@@ -26,7 +31,9 @@ def test_authorized_client_has_form(author_client, id_news_for_args):
 
 @pytest.mark.django_db
 def test_news_count(client, create_news_test):
-    """Количество новостей на главной странице — не более 10."""
+    """
+    Количество новостей на главной странице — не более 10.
+    """
     url = reverse('news:home')
     response = client.get(url)
     object_list = response.context['object_list']
@@ -36,8 +43,10 @@ def test_news_count(client, create_news_test):
 
 @pytest.mark.django_db
 def test_news_order(client, create_news_test):
-    """Новости отсортированы от самой свежей к самой старой.
-    Свежие новости в начале списка."""
+    """
+    Новости отсортированы от самой свежей к самой старой.
+    Свежие новости в начале списка.
+    """
     url = reverse('news:home')
     response = client.get(url)
     object_list = response.context['object_list']
@@ -48,8 +57,10 @@ def test_news_order(client, create_news_test):
 
 @pytest.mark.django_db
 def test_comments_order(client, id_news_for_args):
-    """Комментарии на странице отдельной новости отсортированы в
-    хронологическом порядке: старые в начале списка, новые — в конце."""
+    """
+    Комментарии на странице отдельной новости отсортированы в
+    хронологическом порядке: старые в начале списка, новые — в конце.
+    """
     url = reverse('news:detail', args=id_news_for_args)
     response = client.get(url)
     news = response.context['news']

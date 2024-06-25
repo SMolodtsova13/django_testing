@@ -4,11 +4,11 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yanote.settings")
 django.setup()
 
-from http import HTTPStatus
-
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
+
+from http import HTTPStatus
 
 from pytils.translit import slugify
 
@@ -37,8 +37,8 @@ class TestNotesCreation(TestCase):
             'slug': 'new-slug'
         }
 
-    """Анонимный пользователь не может создать заметку."""
     def test_anonymous_user_cant_create_notes(self):
+        """Анонимный пользователь не может создать заметку."""
         response = self.client.post(self.url, data=self.form_data)
         login_url = reverse('users:login')
         redirect_url = f'{login_url}?next={self.url}'
@@ -46,8 +46,8 @@ class TestNotesCreation(TestCase):
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 0)
 
-    """Залогиненный пользователь может создать заметку."""
     def test_user_can_create_note(self):
+        """Залогиненный пользователь может создать заметку."""
         response = self.auth_client.post(self.url, data=self.form_data)
         self.assertRedirects(response, reverse('notes:success'))
         notes_count = Note.objects.count()
@@ -59,8 +59,8 @@ class TestNotesCreation(TestCase):
         self.assertEqual(new_note.slug, self.form_data['slug'])
         self.assertEqual(new_note.author, self.user)
 
-    """Невозможно создать две заметки с одинаковым slug."""
     def test_not_unique_slug(self):
+        """Невозможно создать две заметки с одинаковым slug."""
         self.auth_client.post(self.url, data=self.form_data)
         response = self.auth_client.post(self.url, data=self.form_data_test)
         self.assertFormError(
@@ -72,9 +72,11 @@ class TestNotesCreation(TestCase):
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 1)
 
-    """Если при создании заметки не заполнен slug, то он
-    формируется автоматически, с помощью функции pytils.translit.slugify."""
     def test_empty_slug(self):
+        """
+        Если при создании заметки не заполнен slug, то он
+        формируется автоматически, с помощью функции pytils.translit.slugify.
+        """
         self.form_data.pop('slug')
         response = self.auth_client.post(self.url, data=self.form_data)
         self.assertRedirects(response, reverse('notes:success'))
@@ -112,22 +114,22 @@ class TestNoteEditDelete(TestCase):
             'slug': 'new-slug'
         }
 
-    """Пользователь удалять свои заметки"""
     def test_author_can_delete_note(self):
+        """Пользователь удалять свои заметки"""
         response = self.author_client.delete(self.delete_url)
         self.assertRedirects(response, self.url)
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 0)
 
-    """Пользователь не может удалять чужие заметки."""
     def test_user_cant_delete_note_of_another_user(self):
+        """Пользователь не может удалять чужие заметки."""
         response = self.reader_client.delete(self.delete_url)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 1)
 
-    """Пользователь может редактировать свои заметки"""
     def test_author_can_edit_notes(self):
+        """Пользователь может редактировать свои заметки"""
         response = self.author_client.post(self.edit_url, data=self.form_data)
         self.assertRedirects(response, self.url)
         self.notes.refresh_from_db()
@@ -135,8 +137,8 @@ class TestNoteEditDelete(TestCase):
         self.assertEqual(self.notes.text, self.form_data['text'])
         self.assertEqual(self.notes.slug, self.form_data['slug'])
 
-    """Пользователь не может редактировать чужие заметки"""
     def test_user_cant_edit_note_of_another_user(self):
+        """Пользователь не может редактировать чужие заметки"""
         response = self.reader_client.post(self.edit_url, data=self.form_data)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         self.notes.refresh_from_db()

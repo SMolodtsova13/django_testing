@@ -11,8 +11,10 @@ from news.forms import BAD_WORDS, WARNING
 
 
 def test_user_cant_use_bad_words(author_client, id_news_for_args):
-    """Если комментарий содержит запрещённые слова,
-    он не будет опубликован, а форма вернёт ошибку."""
+    """
+    Если комментарий содержит запрещённые слова,
+    он не будет опубликован, а форма вернёт ошибку.
+    """
     url = reverse('news:detail', args=id_news_for_args)
     bad_words_data = {'text': f'Какой-то текст, {BAD_WORDS[0]}, еще текст'}
     response = author_client.post(url, data=bad_words_data)
