@@ -1,8 +1,11 @@
 import pytest
 
 from django.test.client import Client
+from yanews import settings
 
 from news.models import News, Comment
+
+from datetime import datetime, timedelta
 
 
 @pytest.fixture
@@ -27,6 +30,18 @@ def not_author_client(not_author):
     client = Client()
     client.force_login(not_author)
     return client
+
+
+@pytest.fixture
+def create_news_test():
+    today = datetime.today()
+    all_news = [News(title=f'Новость {index}',
+                     text='Просто текст.',
+                     date=today - timedelta(days=index)
+                     )
+                for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
+                ]
+    return News.objects.bulk_create(all_news)
 
 
 @pytest.fixture
@@ -56,6 +71,30 @@ def comment(author, news):
 
 
 @pytest.fixture
+def new_comment(author, news):
+    new_comment = Comment.objects.create(
+        news=news,
+        date=datetime.today(),
+        text='Текст комментария',
+        author=author,
+        id=2,
+    )
+    return new_comment
+
+
+@pytest.fixture
+def new_comment_test(author, news):
+    new_comment_test = Comment.objects.create(
+        news=news,
+        date=datetime.today() - timedelta(days=1),
+        text='Текст комментария',
+        author=author,
+        id=3,
+    )
+    return new_comment_test
+
+
+@pytest.fixture
 def id_for_args(comment):
     return (comment.id,)
 
@@ -64,25 +103,5 @@ def id_for_args(comment):
 def comment_test():
     return {
         'text': 'Новый текст комментария',
-        'id': '2',
+        'id': '4',
     }
-
-
-
-# @pytest.fixture
-# def bad_comment_test():
-#     return {
-#         'text': 'Новый текст комментария - редиска',
-#         'id': '3',
-#     }
-
-
-# @pytest.fixture
-# def comment_test(author, news):
-#     comment_test = Comment.objects.create(
-#         news=news,
-#         text='Текст комментария',
-#         author=author,
-#         id=2,
-#     )
-#     return comment_test

@@ -31,6 +31,11 @@ class TestNotesCreation(TestCase):
             'text': 'Новый текст',
             'slug': 'new-slug'
         }
+        cls.form_data_test = {
+            'title': 'Заголовок',
+            'text': 'Текст',
+            'slug': 'new-slug'
+        }
 
     """Анонимный пользователь не может создать заметку."""
     def test_anonymous_user_cant_create_notes(self):
@@ -55,10 +60,15 @@ class TestNotesCreation(TestCase):
         self.assertEqual(new_note.author, self.user)
 
     """Невозможно создать две заметки с одинаковым slug."""
-    def test_user_cant_create_same_notes(self):
+    def test_not_unique_slug(self):
         self.auth_client.post(self.url, data=self.form_data)
-        self.auth_client.post(self.url, data=self.form_data)
-
+        response = self.auth_client.post(self.url, data=self.form_data_test)
+        self.assertFormError(
+            response,
+            form='form',
+            field='slug',
+            errors=(self.form_data_test['slug'] + WARNING)
+        )
         notes_count = Note.objects.count()
         self.assertEqual(notes_count, 1)
 

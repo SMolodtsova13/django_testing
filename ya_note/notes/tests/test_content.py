@@ -7,8 +7,8 @@ django.setup()
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
-from django.test.utils import setup_test_environment
 
+from django.test.utils import setup_test_environment
 from notes.models import Note
 from notes.forms import NoteForm
 

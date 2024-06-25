@@ -20,9 +20,9 @@ def test_pages_availability_for_anonymous_user(client, name):
 
 
 @pytest.mark.django_db
-def test_detail_page(client, news):
+def test_detail_page(client, id_news_for_args):
     """Страница отдельной новости доступна анонимному пользователю."""
-    url = reverse('news:detail', args=(news.id,))
+    url = reverse('news:detail', args=id_news_for_args)
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
 
@@ -39,12 +39,12 @@ def test_detail_page(client, news):
     ('news:edit', 'news:delete'),
 )
 def test_pages_availability_for_different_users(
-        parametrized_client, name, expected_status, comment,
+        parametrized_client, name, expected_status, id_for_args
 ):
     """Страницы удаления и редактирования доступны автору комментария.
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404)."""
-    url = reverse(name,  args=(comment.id,))
+    url = reverse(name,  args=id_for_args)
     response = parametrized_client.get(url)
     assert response.status_code == expected_status
 
