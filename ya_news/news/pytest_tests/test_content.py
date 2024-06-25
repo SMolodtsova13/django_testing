@@ -1,13 +1,8 @@
 import pytest
 
-from http import HTTPStatus
-
-from pytest_django.asserts import assertRedirects, assertFormError
-
 from django.urls import reverse
 
-from news.models import Comment
-from news.forms import BAD_WORDS, WARNING, CommentForm
+from news.forms import CommentForm
 
 from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
 
