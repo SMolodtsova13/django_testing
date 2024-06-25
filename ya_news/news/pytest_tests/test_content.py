@@ -31,9 +31,7 @@ def test_authorized_client_has_form(author_client, id_news_for_args):
 
 @pytest.mark.django_db
 def test_news_count(client, create_news_test):
-    """
-    Количество новостей на главной странице — не более 10.
-    """
+    """Количество новостей на главной странице — не более 10."""
     url = reverse('news:home')
     response = client.get(url)
     object_list = response.context['object_list']

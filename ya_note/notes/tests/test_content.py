@@ -1,9 +1,3 @@
-import os
-import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yanote.settings")
-django.setup()
-
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.test.utils import setup_test_environment
@@ -11,6 +5,13 @@ from django.urls import reverse
 
 from notes.models import Note
 from notes.forms import NoteForm
+
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yanote.settings")
+django.setup()
+
 
 User = get_user_model()
 

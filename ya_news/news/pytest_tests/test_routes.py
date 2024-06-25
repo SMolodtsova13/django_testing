@@ -49,7 +49,7 @@ def test_pages_availability_for_different_users(
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404).
     """
-    url = reverse(name,  args=id_for_args)
+    url = reverse(name, args=id_for_args)
     response = parametrized_client.get(url)
     assert response.status_code == expected_status
 
