@@ -2,11 +2,21 @@ from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from notes.models import Note
 
-from constants import ADD_URL, DELETE_URL, EDIT_URL, LOGIN_URL, SUCCESS_URL
-from constants import HOME_URL, LIST_URL, LOGOUT_URL, SINGUP_URL, DETAIL_URL
+SLUG = 'note-slug'
+HOME_URL = reverse('notes:home',)
+LIST_URL = reverse('notes:list',)
+ADD_URL = reverse('notes:add',)
+SUCCESS_URL = reverse('notes:success',)
+LOGIN_URL = reverse('users:login',)
+LOGOUT_URL = reverse('users:logout',)
+SINGUP_URL = reverse('users:signup',)
+DETAIL_URL = reverse('notes:detail', args=(SLUG,))
+EDIT_URL = reverse('notes:edit', args=(SLUG,))
+DELETE_URL = reverse('notes:delete', args=(SLUG,))
 
 
 User = get_user_model()

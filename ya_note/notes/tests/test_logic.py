@@ -2,15 +2,22 @@ from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from pytils.translit import slugify
-
-from constants import ADD_URL, DELETE_URL, EDIT_URL, LOGIN_URL, SUCCESS_URL
 
 from notes.models import Note
 from notes.forms import WARNING
 
 User = get_user_model()
+
+SLUG = 'note-slug'
+ADD_URL = reverse('notes:add',)
+SUCCESS_URL = reverse('notes:success',)
+LOGIN_URL = reverse('users:login',)
+LOGOUT_URL = reverse('users:logout',)
+EDIT_URL = reverse('notes:edit', args=(SLUG,))
+DELETE_URL = reverse('notes:delete', args=(SLUG,))
 
 
 class TestNotesCreation(TestCase):

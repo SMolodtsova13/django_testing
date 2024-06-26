@@ -1,10 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from notes.models import Note
 from notes.forms import NoteForm
 
-from constants import ADD_URL, LIST_URL, EDIT_URL
+SLUG = 'note-slug'
+LIST_URL = reverse('notes:list',)
+ADD_URL = reverse('notes:add',)
+EDIT_URL = reverse('notes:edit', args=(SLUG,))
 
 User = get_user_model()
 
