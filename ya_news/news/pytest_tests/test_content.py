@@ -12,7 +12,6 @@ def test_anonymous_client_has_no_form(client, news_detail_url):
     Анонимному пользователю недоступна форма для отправки
     комментария на странице отдельной новости.
     """
-
     response = client.get(news_detail_url)
     assert 'form' not in response.context
 
@@ -22,7 +21,6 @@ def test_authorized_client_has_form(author_client, news_detail_url):
     Авторизованному пользователю доступна форма для отправки комментария
     на странице отдельной новости.
     """
-
     response = author_client.get(news_detail_url)
     assert 'form' in response.context
     assert isinstance(response.context['form'], CommentForm)
@@ -53,7 +51,6 @@ def test_comments_order(client, news_detail_url):
     Комментарии на странице отдельной новости отсортированы в
     хронологическом порядке: старые в начале списка, новые — в конце.
     """
-
     response = client.get(news_detail_url)
     news = response.context['news']
     all_comments = news.comment_set.all()

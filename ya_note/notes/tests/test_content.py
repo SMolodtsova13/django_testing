@@ -34,7 +34,6 @@ class TestPagesNote(TestCase):
         cls.add_url = reverse(cls.ADD_URL, args=None)
         cls.edit_url = reverse(cls.EDIT_URL, args=(cls.note.slug,))
         setup_test_environment()
-        # cls.delete_url = reverse(cls.DELETE_URL, args=(cls.notes.slug,))
 
     def test_note_in_list_for_author(self):
         """
@@ -59,7 +58,7 @@ class TestPagesNote(TestCase):
         urls = (
             self.add_url,
             self.edit_url,
-        ) 
+        )
         for url in urls:
             with self.subTest(name=url):
                 response = self.author_client.get(url)

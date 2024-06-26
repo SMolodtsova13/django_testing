@@ -20,7 +20,6 @@ def test_pages_availability_for_anonymous_user(client, name):
     Главная страница, cтраницы регистрации пользователей,
     входа в учётную запись и выхода из неё доступны анонимным пользователям.
     """
-
     response = client.get(name)
     assert response.status_code == HTTPStatus.OK
 
@@ -52,7 +51,6 @@ def test_pages_availability_for_different_users(
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404).
     """
-
     response = parametrized_client.get(name)
     assert response.status_code == expected_status
 
@@ -67,7 +65,6 @@ def test_redirect_for_anonymous_client(client, name, users_login_url):
     При попытке перейти на страницу редактирования или удалени комментария
     анонимный пользователь перенаправляется на страницу авторизации.
     """
-
     expected_url = f'{users_login_url}?next={name}'
     response = client.get(name)
     assertRedirects(response, expected_url)

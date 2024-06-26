@@ -10,7 +10,6 @@ from django.urls import reverse
 from pytils.translit import slugify
 
 from notes.models import Note
-from notes.forms import WARNING
 
 
 User = get_user_model()
