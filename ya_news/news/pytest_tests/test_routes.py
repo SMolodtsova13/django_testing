@@ -4,29 +4,30 @@ import pytest
 
 from pytest_django.asserts import assertRedirects
 
-from django.urls import reverse
 
 pytestmark = pytest.mark.django_db
 
 
 @pytest.mark.parametrize(
     'name',
-    ('news:home', 'users:login', 'users:logout', 'users:signup')
+    (pytest.lazy_fixture('home_url'),
+     pytest.lazy_fixture('users_login_url'),
+     pytest.lazy_fixture('users_logout_url'),
+     pytest.lazy_fixture('users_singnup_url'))
 )
 def test_pages_availability_for_anonymous_user(client, name):
     """
     Главная страница, cтраницы регистрации пользователей,
     входа в учётную запись и выхода из неё доступны анонимным пользователям.
     """
-    url = reverse(name)
-    response = client.get(url)
+
+    response = client.get(name)
     assert response.status_code == HTTPStatus.OK
 
 
-def test_detail_page(client, id_news_for_args):
+def test_detail_page(client, news_detail_url):
     """Страница отдельной новости доступна анонимному пользователю."""
-    url = reverse('news:detail', args=id_news_for_args)
-    response = client.get(url)
+    response = client.get(news_detail_url)
     assert response.status_code == HTTPStatus.OK
 
 
@@ -39,10 +40,11 @@ def test_detail_page(client, id_news_for_args):
 )
 @pytest.mark.parametrize(
     'name',
-    ('news:edit', 'news:delete'),
+    (pytest.lazy_fixture('news_delete_url'),
+     pytest.lazy_fixture('news_edit_url')),
 )
 def test_pages_availability_for_different_users(
-    parametrized_client, name, expected_status, id_for_args
+    parametrized_client, name, expected_status
 ):
     """
     Страницы удаления и редактирования доступны автору комментария.
@@ -50,25 +52,22 @@ def test_pages_availability_for_different_users(
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404).
     """
-    url = reverse(name, args=id_for_args)
-    response = parametrized_client.get(url)
+
+    response = parametrized_client.get(name)
     assert response.status_code == expected_status
 
 
 @pytest.mark.parametrize(
-    'name, args',
-    (
-        ('news:edit', pytest.lazy_fixture('id_for_args')),
-        ('news:delete', pytest.lazy_fixture('id_for_args')),
-    ),
+    'name',
+    (pytest.lazy_fixture('news_delete_url'),
+     pytest.lazy_fixture('news_edit_url')),
 )
-def test_redirect_for_anonymous_client(client, name, args):
+def test_redirect_for_anonymous_client(client, name, users_login_url):
     """
     При попытке перейти на страницу редактирования или удалени комментария
     анонимный пользователь перенаправляется на страницу авторизации.
     """
-    login_url = reverse('users:login')
-    url = reverse(name, args=args)
-    expected_url = f'{login_url}?next={url}'
-    response = client.get(url)
+
+    expected_url = f'{users_login_url}?next={name}'
+    response = client.get(name)
     assertRedirects(response, expected_url)

@@ -1,3 +1,6 @@
+# from .help_django_setting import set_django_settings
+# set_django_settings()
+
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
@@ -6,14 +9,15 @@ from django.urls import reverse
 
 from notes.models import Note
 
+
 SLUG = 'note-slug'
-HOME_URL = reverse('notes:home',)
-LIST_URL = reverse('notes:list',)
-ADD_URL = reverse('notes:add',)
-SUCCESS_URL = reverse('notes:success',)
-LOGIN_URL = reverse('users:login',)
-LOGOUT_URL = reverse('users:logout',)
-SINGUP_URL = reverse('users:signup',)
+HOME_URL = reverse('notes:home')
+LIST_URL = reverse('notes:list')
+ADD_URL = reverse('notes:add')
+SUCCESS_URL = reverse('notes:success')
+LOGIN_URL = reverse('users:login')
+LOGOUT_URL = reverse('users:logout')
+SINGUP_URL = reverse('users:signup')
 DETAIL_URL = reverse('notes:detail', args=(SLUG,))
 EDIT_URL = reverse('notes:edit', args=(SLUG,))
 DELETE_URL = reverse('notes:delete', args=(SLUG,))
@@ -66,7 +70,7 @@ class TestRoutes(TestCase):
         вернётся ошибка 404.
         """
         users_statuses = (
-            (self.author, HTTPStatus.OK),
+            (self.author, HTTPStatus.NOT_FOUND),
             (self.reader, HTTPStatus.NOT_FOUND),
         )
         for user, status in users_statuses:

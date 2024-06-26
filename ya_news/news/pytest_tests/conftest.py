@@ -4,8 +4,44 @@ from datetime import datetime, timedelta
 
 from django.test.client import Client
 from django.conf import settings
+from django.urls import reverse
 
 from news.models import News, Comment
+
+
+@pytest.fixture
+def home_url():
+    return reverse('news:home')
+
+
+@pytest.fixture
+def news_detail_url(id_news_for_args):
+    return reverse('news:detail', args=id_news_for_args)
+
+
+@pytest.fixture
+def users_login_url():
+    return reverse('users:login')
+
+
+@pytest.fixture
+def users_logout_url():
+    return reverse('users:logout')
+
+
+@pytest.fixture
+def users_singnup_url():
+    return reverse('users:signup')
+
+
+@pytest.fixture
+def news_edit_url(id_for_args):
+    return reverse('news:edit', args=id_for_args)
+
+
+@pytest.fixture
+def news_delete_url(id_for_args):
+    return reverse('news:delete', args=id_for_args)
 
 
 @pytest.fixture

@@ -1,3 +1,6 @@
+# from .help_django_setting import set_django_settings
+# set_django_settings()
+
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -5,15 +8,15 @@ from django.urls import reverse
 from notes.models import Note
 from notes.forms import NoteForm
 
-SLUG = 'note-slug'
-LIST_URL = reverse('notes:list',)
-ADD_URL = reverse('notes:add',)
-EDIT_URL = reverse('notes:edit', args=(SLUG,))
+from django.test.utils import setup_test_environment
 
 User = get_user_model()
 
 
 class TestPagesNote(TestCase):
+    ADD_URL = 'notes:add'
+    EDIT_URL = 'notes:edit'
+    LIST_URL = reverse('notes:list')
 
     @classmethod
     def setUpTestData(cls):
@@ -28,13 +31,17 @@ class TestPagesNote(TestCase):
         cls.user = User.objects.create(username='Мимо Крокодил')
         cls.auth_client = Client()
         cls.auth_client.force_login(cls.user)
+        cls.add_url = reverse(cls.ADD_URL, args=None)
+        cls.edit_url = reverse(cls.EDIT_URL, args=(cls.note.slug,))
+        setup_test_environment()
+        # cls.delete_url = reverse(cls.DELETE_URL, args=(cls.notes.slug,))
 
     def test_note_in_list_for_author(self):
         """
         Отдельная заметка передаётся на страницу со списком заметок
         в списке object_list в словаре context.
         """
-        response = self.author_client.get(LIST_URL)
+        response = self.author_client.get(self.LIST_URL)
         object_list = response.context['object_list']
         self.assertIn(self.note, object_list)
 
@@ -43,15 +50,18 @@ class TestPagesNote(TestCase):
         В список заметок одного пользователя не попадают
         заметки другого пользователя.
         """
-        response = self.auth_client.get(LIST_URL)
+        response = self.auth_client.get(self.LIST_URL)
         object_list = response.context['object_list']
         self.assertNotIn(self.note, object_list)
 
     def test_pages_contains_form(self):
         """На страницы создания и редактирования заметки передаются формы."""
-        urls = (ADD_URL, EDIT_URL,)
+        urls = (
+            self.add_url,
+            self.edit_url,
+        ) 
         for url in urls:
-            with self.subTest(url=url):
+            with self.subTest(name=url):
                 response = self.author_client.get(url)
                 self.assertIn('form', response.context)
                 self.assertIsInstance(response.context['form'], NoteForm)

@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+help_django_setting.py
+
 # C extensions
 *.so
 
