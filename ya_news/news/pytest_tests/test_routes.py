@@ -1,13 +1,14 @@
-import pytest
-
 from http import HTTPStatus
 
-from django.urls import reverse
+import pytest
 
 from pytest_django.asserts import assertRedirects
 
+from django.urls import reverse
 
-@pytest.mark.django_db
+pytestmark = pytest.mark.django_db
+
+
 @pytest.mark.parametrize(
     'name',
     ('news:home', 'users:login', 'users:logout', 'users:signup')
@@ -22,7 +23,6 @@ def test_pages_availability_for_anonymous_user(client, name):
     assert response.status_code == HTTPStatus.OK
 
 
-@pytest.mark.django_db
 def test_detail_page(client, id_news_for_args):
     """Страница отдельной новости доступна анонимному пользователю."""
     url = reverse('news:detail', args=id_news_for_args)
@@ -46,6 +46,7 @@ def test_pages_availability_for_different_users(
 ):
     """
     Страницы удаления и редактирования доступны автору комментария.
+
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404).
     """

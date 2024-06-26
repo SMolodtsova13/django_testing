@@ -1,16 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
-from django.urls import reverse
 
 from notes.models import Note
 from notes.forms import NoteForm
 
-import os
-import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yanote.settings")
-django.setup()
-
+from constants import ADD_URL, LIST_URL, EDIT_URL
 
 User = get_user_model()
 
@@ -30,14 +24,13 @@ class TestPagesNote(TestCase):
         cls.user = User.objects.create(username='Мимо Крокодил')
         cls.auth_client = Client()
         cls.auth_client.force_login(cls.user)
-        cls.url = reverse('notes:list')
 
     def test_note_in_list_for_author(self):
         """
         Отдельная заметка передаётся на страницу со списком заметок
         в списке object_list в словаре context.
         """
-        response = self.author_client.get(self.url)
+        response = self.author_client.get(LIST_URL)
         object_list = response.context['object_list']
         self.assertIn(self.note, object_list)
 
@@ -46,19 +39,15 @@ class TestPagesNote(TestCase):
         В список заметок одного пользователя не попадают
         заметки другого пользователя.
         """
-        response = self.auth_client.get(self.url)
+        response = self.auth_client.get(LIST_URL)
         object_list = response.context['object_list']
         self.assertNotIn(self.note, object_list)
 
     def test_pages_contains_form(self):
         """На страницы создания и редактирования заметки передаются формы."""
-        urls = (
-            ('notes:add', None),
-            ('notes:edit', (self.note.slug,)),
-        )
-        for name, args in urls:
-            with self.subTest(name=name):
-                url = reverse(name, args=args,)
+        urls = (ADD_URL, EDIT_URL,)
+        for url in urls:
+            with self.subTest(url=url):
                 response = self.author_client.get(url)
                 self.assertIn('form', response.context)
                 self.assertIsInstance(response.context['form'], NoteForm)

@@ -1,17 +1,18 @@
-import pytest
-
 from django.urls import reverse
+
+import pytest
 
 from news.forms import CommentForm
 
 from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 def test_anonymous_client_has_no_form(client, id_news_for_args):
     """
     Анонимному пользователю недоступна форма для отправки
-    комментария на странице отдельной новости
+    комментария на странице отдельной новости.
     """
     url = reverse('news:detail', args=id_news_for_args)
     response = client.get(url)
@@ -21,7 +22,7 @@ def test_anonymous_client_has_no_form(client, id_news_for_args):
 def test_authorized_client_has_form(author_client, id_news_for_args):
     """
     Авторизованному пользователю доступна форма для отправки комментария
-    на странице отдельной новости
+    на странице отдельной новости.
     """
     url = reverse('news:detail', args=id_news_for_args)
     response = author_client.get(url)
@@ -29,7 +30,6 @@ def test_authorized_client_has_form(author_client, id_news_for_args):
     assert isinstance(response.context['form'], CommentForm)
 
 
-@pytest.mark.django_db
 def test_news_count(client, create_news_test):
     """Количество новостей на главной странице — не более 10."""
     url = reverse('news:home')
@@ -39,7 +39,6 @@ def test_news_count(client, create_news_test):
     assert news_count == NEWS_COUNT_ON_HOME_PAGE
 
 
-@pytest.mark.django_db
 def test_news_order(client, create_news_test):
     """
     Новости отсортированы от самой свежей к самой старой.
@@ -53,7 +52,6 @@ def test_news_order(client, create_news_test):
     assert all_dates == sorted_dates
 
 
-@pytest.mark.django_db
 def test_comments_order(client, id_news_for_args):
     """
     Комментарии на странице отдельной новости отсортированы в

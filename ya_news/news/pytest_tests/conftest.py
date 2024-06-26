@@ -1,12 +1,11 @@
 import pytest
 
-from django.test.client import Client
+from datetime import datetime, timedelta
 
-from yanews import settings
+from django.test.client import Client
+from django.conf import settings
 
 from news.models import News, Comment
-
-from datetime import datetime, timedelta
 
 
 @pytest.fixture
@@ -50,7 +49,6 @@ def news():
     news = News.objects.create(
         title='Заголовок',
         text='Текст новости',
-        id=1,
     )
     return news
 
@@ -66,33 +64,19 @@ def comment(author, news):
         news=news,
         text='Текст комментария',
         author=author,
-        id=1,
     )
     return comment
 
 
 @pytest.fixture
-def new_comment(author, news):
-    new_comment = Comment.objects.create(
-        news=news,
-        date=datetime.today(),
-        text='Текст комментария',
-        author=author,
-        id=2,
-    )
-    return new_comment
-
-
-@pytest.fixture
-def new_comment_test(author, news):
-    new_comment_test = Comment.objects.create(
-        news=news,
-        date=datetime.today() - timedelta(days=1),
-        text='Текст комментария',
-        author=author,
-        id=3,
-    )
-    return new_comment_test
+def create_new_comment():
+    today = datetime.today()
+    all_comment = [Comment(text=f'Комментарий {index}',
+                           date=today - timedelta(days=index),
+                           )
+                   for index in range(settings.NEWS_COUNT_ON_HOME_PAGE)
+                   ]
+    return Comment.objects.bulk_create(all_comment)
 
 
 @pytest.fixture
@@ -101,8 +85,7 @@ def id_for_args(comment):
 
 
 @pytest.fixture
-def comment_test():
+def create_comment_test():
     return {
         'text': 'Новый текст комментария',
-        'id': '4',
     }
