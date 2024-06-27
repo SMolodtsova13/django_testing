@@ -1,6 +1,6 @@
-import pytest
-
 from datetime import datetime, timedelta
+
+import pytest
 
 from django.test.client import Client
 from django.conf import settings

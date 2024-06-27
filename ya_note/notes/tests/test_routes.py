@@ -1,6 +1,3 @@
-# from .help_django_setting import set_django_settings
-# set_django_settings()
-
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model

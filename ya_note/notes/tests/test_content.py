@@ -1,6 +1,3 @@
-# from .help_django_setting import set_django_settings
-# set_django_settings()
-
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -9,9 +6,6 @@ from notes.models import Note
 from notes.forms import NoteForm
 
 User = get_user_model()
-
-# from django.test.utils import setup_test_environment
-# setup_test_environment()
 
 
 class TestPagesNote(TestCase):
@@ -36,19 +30,13 @@ class TestPagesNote(TestCase):
         cls.edit_url = reverse(cls.EDIT_URL, args=(cls.note.slug,))
 
     def test_note_in_list_for_author(self):
-        """
-        Отдельная заметка передаётся на страницу со списком заметок
-        в списке object_list в словаре context.
-        """
+        """Заметка передаётся на страницу со списком заметок."""
         response = self.author_client.get(self.LIST_URL)
         object_list = response.context['object_list']
         self.assertIn(self.note, object_list)
 
     def test_note_not_in_list_for_another_user(self):
-        """
-        В список заметок одного пользователя не попадают
-        заметки другого пользователя.
-        """
+        """В список заметок одного пользователя не попадают заметки другого."""
         response = self.auth_client.get(self.LIST_URL)
         object_list = response.context['object_list']
         self.assertNotIn(self.note, object_list)

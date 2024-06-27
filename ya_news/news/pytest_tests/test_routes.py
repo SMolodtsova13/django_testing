@@ -1,9 +1,7 @@
 from http import HTTPStatus
 
 import pytest
-
 from pytest_django.asserts import assertRedirects
-
 
 pytestmark = pytest.mark.django_db
 
@@ -16,10 +14,7 @@ pytestmark = pytest.mark.django_db
      pytest.lazy_fixture('users_singnup_url'))
 )
 def test_pages_availability_for_anonymous_user(client, name):
-    """
-    Главная страница, cтраницы регистрации пользователей,
-    входа в учётную запись и выхода из неё доступны анонимным пользователям.
-    """
+    """Главная страница, регистрация, входа, выхода доступны пользователям."""
     response = client.get(name)
     assert response.status_code == HTTPStatus.OK
 
@@ -47,7 +42,6 @@ def test_pages_availability_for_different_users(
 ):
     """
     Страницы удаления и редактирования доступны автору комментария.
-
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404).
     """
@@ -61,10 +55,7 @@ def test_pages_availability_for_different_users(
      pytest.lazy_fixture('news_edit_url')),
 )
 def test_redirect_for_anonymous_client(client, name, users_login_url):
-    """
-    При попытке перейти на страницу редактирования или удалени комментария
-    анонимный пользователь перенаправляется на страницу авторизации.
-    """
+    """Анонимный пользователь перенаправляется на страницу авторизации."""
     expected_url = f'{users_login_url}?next={name}'
     response = client.get(name)
     assertRedirects(response, expected_url)

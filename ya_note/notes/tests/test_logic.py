@@ -1,12 +1,8 @@
-# from .help_django_setting import set_django_settings
-# set_django_settings()
-
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
-
 from pytils.translit import slugify
 
 from notes.models import Note
@@ -72,13 +68,15 @@ class TestNotesCreation(TestCase):
         формируется автоматически, с помощью функции pytils.translit.slugify.
         """
         self.form_data.pop('slug')
+        self.assertEqual(Note.objects.count(), 0)
         response = self.auth_client.post(ADD_URL, data=self.form_data)
         self.assertRedirects(response, SUCCESS_URL)
-        notes_count = Note.objects.count()
-        self.assertEqual(notes_count, 1)
         new_note = Note.objects.get()
         expected_slug = slugify(self.form_data['title'])
         self.assertEqual(new_note.slug, expected_slug)
+        self.assertEqual(new_note.title, self.form_data['title'])
+        self.assertEqual(new_note.text, self.form_data['text'])
+        self.assertEqual(Note.objects.count(), 1)
 
 
 class TestNoteEditDelete(TestCase):
@@ -124,18 +122,20 @@ class TestNoteEditDelete(TestCase):
 
     def test_author_can_edit_notes(self):
         """Пользователь может редактировать свои заметки"""
+        self.assertEqual(Note.objects.count(), 1)
         response = self.author_client.post(self.edit_url, data=self.form_data)
         self.assertRedirects(response, SUCCESS_URL)
-        self.notes.refresh_from_db()
-        self.assertEqual(self.notes.title, self.form_data['title'])
-        self.assertEqual(self.notes.text, self.form_data['text'])
-        self.assertEqual(self.notes.slug, self.form_data['slug'])
-        self.assertEqual(self.notes.author, self.author)
+        notes = Note.objects.get()
+        self.assertEqual(notes.title, self.form_data['title'])
+        self.assertEqual(notes.text, self.form_data['text'])
+        self.assertEqual(notes.slug, self.form_data['slug'])
+        self.assertEqual(notes.author, self.author)
 
     def test_user_cant_edit_note_of_another_user(self):
         """Пользователь не может редактировать чужие заметки"""
+        self.assertEqual(Note.objects.count(), 1)
         response = self.reader_client.post(self.edit_url, data=self.form_data)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
-        self.notes.refresh_from_db()
-        self.assertEqual(self.notes.text, self.NOTE_TEXT)
-        self.assertEqual(self.notes.author, self.author)
+        notes = Note.objects.get()
+        self.assertEqual(notes.text, self.NOTE_TEXT)
+        self.assertEqual(notes.author, self.author)
