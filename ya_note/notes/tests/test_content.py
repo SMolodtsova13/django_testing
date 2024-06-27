@@ -8,9 +8,10 @@ from django.urls import reverse
 from notes.models import Note
 from notes.forms import NoteForm
 
-from django.test.utils import setup_test_environment
-
 User = get_user_model()
+
+# from django.test.utils import setup_test_environment
+# setup_test_environment()
 
 
 class TestPagesNote(TestCase):
@@ -33,7 +34,6 @@ class TestPagesNote(TestCase):
         cls.auth_client.force_login(cls.user)
         cls.add_url = reverse(cls.ADD_URL, args=None)
         cls.edit_url = reverse(cls.EDIT_URL, args=(cls.note.slug,))
-        setup_test_environment()
 
     def test_note_in_list_for_author(self):
         """
