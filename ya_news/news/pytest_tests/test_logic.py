@@ -49,7 +49,9 @@ def test_user_can_create_comment(author_client,
 def test_author_can_edit_comment(author_client,
                                  news_detail_url,
                                  news_edit_url,
-                                 create_comment_test):
+                                 create_comment_test,
+                                 news,
+                                 author):
     """Авторизованный пользователь может редактироватьсвои комментарии."""
     coment_count = Comment.objects.count
     response = author_client.post(news_edit_url, data=create_comment_test)
@@ -57,16 +59,22 @@ def test_author_can_edit_comment(author_client,
     assert coment_count == Comment.objects.count
     comment = Comment.objects.get()
     assert comment.text == create_comment_test['text']
+    assert comment.author == author
+    assert comment.news == news
 
 
 def test_user_cant_edit_comment_of_another_user(not_author_client,
                                                 create_comment_test,
-                                                news_edit_url):
+                                                news_edit_url,
+                                                not_author,
+                                                news):
     """Авторизованный пользователь не может редактировать чужие комментарии."""
     response = not_author_client.post(news_edit_url, data=create_comment_test)
     assert response.status_code == HTTPStatus.NOT_FOUND
     comment = Comment.objects.get()
     assert comment.text != create_comment_test['text']
+    assert comment.author != not_author
+    assert comment.news == news
 
 
 def test_author_can_delete_comment(author_client,

@@ -1,8 +1,8 @@
 import pytest
 
-from news.forms import CommentForm
+from django.conf import settings
 
-from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
+from news.forms import CommentForm
 
 pytestmark = pytest.mark.django_db
 
@@ -25,7 +25,7 @@ def test_news_count(client, home_url, create_news_test):
     response = client.get(home_url)
     object_list = response.context['object_list']
     news_count = object_list.count()
-    assert news_count == NEWS_COUNT_ON_HOME_PAGE
+    assert news_count == settings.NEWS_COUNT_ON_HOME_PAGE
 
 
 def test_news_order(client, home_url, create_news_test):

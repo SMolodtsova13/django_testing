@@ -32,14 +32,20 @@ class TestPagesNote(TestCase):
     def test_note_in_list_for_author(self):
         """Заметка передаётся на страницу со списком заметок."""
         response = self.author_client.get(self.LIST_URL)
-        object_list = response.context['object_list']
-        self.assertIn(self.note, object_list)
+        response.context['object_list']
+        self.assertEqual(Note.objects.count(), 1)
+        notes = Note.objects.get()
+        self.assertEqual(notes.text, self.note.text)
+        self.assertEqual(notes.author, self.note.author)
+        self.assertEqual(notes.title, self.note.title)
+        self.assertEqual(notes.slug, self.note.slug)
 
     def test_note_not_in_list_for_another_user(self):
         """В список заметок одного пользователя не попадают заметки другого."""
         response = self.auth_client.get(self.LIST_URL)
         object_list = response.context['object_list']
-        self.assertNotIn(self.note, object_list)
+        self.assertEqual(object_list.count(), 0)
+        self.assertEqual(object_list.first(), None)
 
     def test_pages_contains_form(self):
         """На страницы создания и редактирования заметки передаются формы."""

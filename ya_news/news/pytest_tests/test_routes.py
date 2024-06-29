@@ -3,6 +3,7 @@ from http import HTTPStatus
 import pytest
 from pytest_django.asserts import assertRedirects
 
+
 pytestmark = pytest.mark.django_db
 
 
@@ -11,35 +12,31 @@ pytestmark = pytest.mark.django_db
     (pytest.lazy_fixture('home_url'),
      pytest.lazy_fixture('users_login_url'),
      pytest.lazy_fixture('users_logout_url'),
-     pytest.lazy_fixture('users_singnup_url'))
+     pytest.lazy_fixture('users_singnup_url'),
+     pytest.lazy_fixture('users_logout_url'),)
 )
 def test_pages_availability_for_anonymous_user(client, name):
-    """Главная страница, регистрация, входа, выхода доступны пользователям."""
+    """
+    Главная страница, регистрация, входа, выхода, доступны пользователям.
+    Страница отдельной новости доступна анонимному пользователю.
+    """
     response = client.get(name)
-    assert response.status_code == HTTPStatus.OK
-
-
-def test_detail_page(client, news_detail_url):
-    """Страница отдельной новости доступна анонимному пользователю."""
-    response = client.get(news_detail_url)
     assert response.status_code == HTTPStatus.OK
 
 
 @pytest.mark.parametrize(
     'parametrized_client, expected_status',
-    (
-        (pytest.lazy_fixture('author_client'), HTTPStatus.OK),
-        (pytest.lazy_fixture('not_author_client'), HTTPStatus.NOT_FOUND),
-    ),
+    ((pytest.lazy_fixture('author_client'), HTTPStatus.OK),
+     (pytest.lazy_fixture('not_author_client'), HTTPStatus.NOT_FOUND),),
 )
 @pytest.mark.parametrize(
     'name',
     (pytest.lazy_fixture('news_delete_url'),
      pytest.lazy_fixture('news_edit_url')),
 )
-def test_pages_availability_for_different_users(
-    parametrized_client, name, expected_status
-):
+def test_pages_availability_for_different_users(parametrized_client,
+                                                name,
+                                                expected_status):
     """
     Страницы удаления и редактирования доступны автору комментария.
     Авторизованный пользователь не может зайти на страницы
