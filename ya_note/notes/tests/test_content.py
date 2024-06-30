@@ -45,7 +45,6 @@ class TestPagesNote(TestCase):
         response = self.auth_client.get(self.LIST_URL)
         object_list = response.context['object_list']
         self.assertEqual(object_list.count(), 0)
-        self.assertEqual(object_list.first(), None)
 
     def test_pages_contains_form(self):
         """На страницы создания и редактирования заметки передаются формы."""
