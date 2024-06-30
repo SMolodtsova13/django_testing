@@ -8,20 +8,22 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.mark.parametrize(
-    'name',
-    (pytest.lazy_fixture('home_url'),
-     pytest.lazy_fixture('users_login_url'),
-     pytest.lazy_fixture('users_logout_url'),
-     pytest.lazy_fixture('users_singnup_url'),
-     pytest.lazy_fixture('users_logout_url'),)
+    'name, expected_status',
+    ((pytest.lazy_fixture('home_url'), HTTPStatus.OK),
+     (pytest.lazy_fixture('users_login_url'), HTTPStatus.OK),
+     (pytest.lazy_fixture('users_logout_url'), HTTPStatus.OK),
+     (pytest.lazy_fixture('users_singnup_url'), HTTPStatus.OK),
+     (pytest.lazy_fixture('users_logout_url'), HTTPStatus.OK),)
 )
-def test_pages_availability_for_anonymous_user(client, name):
+def test_pages_availability_for_anonymous_user(client,
+                                               name,
+                                               expected_status):
     """
     Главная страница, регистрация, входа, выхода, доступны пользователям.
     Страница отдельной новости доступна анонимному пользователю.
     """
     response = client.get(name)
-    assert response.status_code == HTTPStatus.OK
+    assert response.status_code == expected_status
 
 
 @pytest.mark.parametrize(
