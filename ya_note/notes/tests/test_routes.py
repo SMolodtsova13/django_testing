@@ -64,7 +64,8 @@ class TestRoutes(TestCase):
         for url in self.all_urls:
             with self.subTest(url=url):
                 response = self.client.get(url)
-                if url in (LIST_URL, ADD_URL, SUCCESS_URL):
+                if url in (LIST_URL, ADD_URL, SUCCESS_URL,
+                           DETAIL_URL, DELETE_URL, EDIT_URL):
                     redirect_url = f'{LOGIN_URL}?next={url}'
                     self.assertRedirects(response, redirect_url)
                 else:
