@@ -13,7 +13,7 @@ pytestmark = pytest.mark.django_db
      (pytest.lazy_fixture('users_login_url')),
      (pytest.lazy_fixture('users_logout_url')),
      (pytest.lazy_fixture('users_singnup_url')),
-     (pytest.lazy_fixture('users_logout_url'),)
+     (pytest.lazy_fixture('news_detail_url'),)
      )
 )
 def test_pages_availability_for_anonymous_user(client, name,):
