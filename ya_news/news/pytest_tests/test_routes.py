@@ -31,32 +31,12 @@ CLIENT_NOT_AUTHORIZATION = Client()
      (EDIT_URL, AUTHOR_CLIENT, HTTPStatus.OK),
      (DELETE_URL, AUTHOR_CLIENT, HTTPStatus.OK))
 )
-
 def test_pages_availability_for_different_user(client_test,
-                                               expected_status,
-                                               name):
+                                               name,
+                                               expected_status):
     """
     Главная страница, регистрация, входа, выхода, доступны пользователям.
     Страница отдельной новости доступна анонимному пользователю.
-    """
-    response = client.get(name)
-    assert response.status_code == HTTPStatus.OK
-
-
-@pytest.mark.parametrize(
-    'parametrized_client, expected_status',
-    ((pytest.lazy_fixture('author_client'), HTTPStatus.OK),
-     (pytest.lazy_fixture('not_author_client'), HTTPStatus.NOT_FOUND),),
-)
-@pytest.mark.parametrize(
-    'name',
-    (pytest.lazy_fixture('news_delete_url'),
-     pytest.lazy_fixture('news_edit_url')),
-)
-def test_pages_availability_for_different_users(parametrized_client,
-                                                name,
-                                                expected_status):
-    """
     Страницы удаления и редактирования доступны автору комментария.
     Авторизованный пользователь не может зайти на страницы
     редактирования или удаления чужих комментариев (ошибка 404).

@@ -66,15 +66,15 @@ def test_author_can_edit_comment(author_client,
 def test_user_cant_edit_comment_of_another_user(not_author_client,
                                                 create_comment_test,
                                                 news_edit_url,
-                                                not_author,
-                                                news):
+                                                news,
+                                                comment):
     """Авторизованный пользователь не может редактировать чужие комментарии."""
     response = not_author_client.post(news_edit_url, data=create_comment_test)
     assert response.status_code == HTTPStatus.NOT_FOUND
-    comment = Comment.objects.get()
-    assert comment.text != create_comment_test['text']
-    assert comment.author != not_author
-    assert comment.news == news
+    comment_new = Comment.objects.get()
+    assert comment_new.text == comment.text
+    assert comment_new.author == comment.author
+    assert comment_new.news == news
 
 
 def test_author_can_delete_comment(author_client,
