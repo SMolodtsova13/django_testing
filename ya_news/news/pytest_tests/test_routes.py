@@ -32,8 +32,8 @@ CLIENT_NOT_AUTHORIZATION = Client()
      (DELETE_URL, AUTHOR_CLIENT, HTTPStatus.OK))
 )
 def test_pages_availability_for_different_user(client_test,
-                                               name,
-                                               expected_status):
+                                               expected_status,
+                                               name):
     """
     Главная страница, регистрация, входа, выхода, доступны пользователям.
     Страница отдельной новости доступна анонимному пользователю.
