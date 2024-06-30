@@ -34,10 +34,9 @@ class TestRoutes(TestCase):
             text='Текст заметки',
             slug=SLUG
         )
-        cls.notes_urls = (DETAIL_URL, DELETE_URL, EDIT_URL)
-        cls.redirected_urls = (LIST_URL, ADD_URL, SUCCESS_URL) + cls.notes_urls
-        cls.all_urls = (HOME_URL, LOGIN_URL,
-                        LOGOUT_URL, SINGUP_URL) + cls.redirected_urls
+        cls.all_urls = (HOME_URL, LOGIN_URL, LOGOUT_URL, SINGUP_URL,
+                        DETAIL_URL, DELETE_URL, EDIT_URL,
+                        LIST_URL, ADD_URL, SUCCESS_URL)
 
     def test_pages_availability_new(self):
         """Все страницы доступны автору."""
@@ -53,7 +52,7 @@ class TestRoutes(TestCase):
             with self.subTest(url=url):
                 self.client.force_login(self.reader)
                 response = self.client.get(url)
-                if url in self.notes_urls:
+                if url in (DETAIL_URL, DELETE_URL, EDIT_URL):
                     self.assertEqual(response.status_code,
                                      HTTPStatus.NOT_FOUND)
                 else:
@@ -65,7 +64,7 @@ class TestRoutes(TestCase):
         for url in self.all_urls:
             with self.subTest(url=url):
                 response = self.client.get(url)
-                if url in self.redirected_urls:
+                if url in (LIST_URL, ADD_URL, SUCCESS_URL):
                     redirect_url = f'{LOGIN_URL}?next={url}'
                     self.assertRedirects(response, redirect_url)
                 else:
