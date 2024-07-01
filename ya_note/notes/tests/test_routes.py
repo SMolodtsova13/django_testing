@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from notes.models import Note
@@ -28,31 +28,36 @@ class TestRoutes(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.author = User.objects.create(username='Лев Толстой')
+        cls.author_client = Client()
+        cls.author_client.force_login(cls.author)
         cls.reader = User.objects.create(username='Читатель простой')
+        cls.auth_client = Client()
+        cls.auth_client.force_login(cls.reader)
         cls.notes = Note.objects.create(
             author=cls.author,
             text='Текст заметки',
             slug=SLUG
         )
-        cls.all_urls = (HOME_URL, LOGIN_URL, LOGOUT_URL, SINGUP_URL,
-                        DETAIL_URL, DELETE_URL, EDIT_URL,
-                        LIST_URL, ADD_URL, SUCCESS_URL)
+        cls.all_urls = (SINGUP_URL, LOGIN_URL, SUCCESS_URL, HOME_URL,
+                        DETAIL_URL, LIST_URL, ADD_URL,
+                        EDIT_URL, DELETE_URL, LOGOUT_URL)
 
     def test_pages_availability_new(self):
         """Все страницы доступны автору."""
         for url in self.all_urls:
             with self.subTest(url=url):
-                self.client.force_login(self.author)
-                response = self.client.get(url)
+                response = self.author_client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_pages_no_author_availability_new(self):
         """Не автору доступны все страницы кроме delete, detail, edit."""
         for url in self.all_urls:
             with self.subTest(url=url):
-                self.client.force_login(self.reader)
-                response = self.client.get(url)
-                if url in (DETAIL_URL, DELETE_URL, EDIT_URL):
+                response = self.auth_client.get(url)
+                inaccessible_pages_not_author = (DETAIL_URL,
+                                                 EDIT_URL,
+                                                 DELETE_URL)
+                if url in inaccessible_pages_not_author:
                     self.assertEqual(response.status_code,
                                      HTTPStatus.NOT_FOUND)
                 else:
@@ -64,8 +69,10 @@ class TestRoutes(TestCase):
         for url in self.all_urls:
             with self.subTest(url=url):
                 response = self.client.get(url)
-                if url in (LIST_URL, ADD_URL, SUCCESS_URL,
-                           DETAIL_URL, DELETE_URL, EDIT_URL):
+                inaccessible_pages_anon_users = (LIST_URL, ADD_URL,
+                                                 SUCCESS_URL, DETAIL_URL,
+                                                 EDIT_URL, DELETE_URL)
+                if url in inaccessible_pages_anon_users:
                     redirect_url = f'{LOGIN_URL}?next={url}'
                     self.assertRedirects(response, redirect_url)
                 else:
