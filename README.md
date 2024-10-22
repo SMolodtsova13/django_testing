@@ -9,7 +9,6 @@
 [![CSS](https://img.shields.io/badge/-CSS-464646?style=flat&logo=CSS&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/CSS)
 [![Bootstrap](https://img.shields.io/badge/-Bootstrap-464646?style=flat&logo=Bootstrap&logoColor=56C0C0&color=008080)](https://getbootstrap.com/)
 
-![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
 ## Краткое описание проекта:
 В этом проекте написаны тесты для двух приложений ya_news(pytest) и ya_note(unittest)  
 ya_note - сервис для создания заметок  
