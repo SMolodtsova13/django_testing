@@ -2,11 +2,11 @@
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat&logo=Django&logoColor=56C0C0&color=008080)](https://www.djangoproject.com/)
-[![Pytest](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://docs.pytest.org/en/stable/)
-[![Unittest](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://docs.python.org/3/library/unittest.html)
-[![HTML](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/HTML)
-[![CSS](https://img.shields.io/badge/-Django-464646?style=flat&logo=Django&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/CSS)
-[![Bootstrap](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://getbootstrap.com/)
+[![Pytest](https://img.shields.io/badge/-Python-464646?style=flat&logo=Pytest&logoColor=56C0C0&color=008080)](https://docs.pytest.org/en/stable/)
+[![Unittest](https://img.shields.io/badge/-Python-464646?style=flat&logo=Unittest&logoColor=56C0C0&color=008080)](https://docs.python.org/3/library/unittest.html)
+[![HTML](https://img.shields.io/badge/-Python-464646?style=flat&logo=HTML&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/HTML)
+[![CSS](https://img.shields.io/badge/-Django-464646?style=flat&logo=CSS&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/CSS)
+[![Bootstrap](https://img.shields.io/badge/-Python-464646?style=flat&logo=Bootstrap&logoColor=56C0C0&color=008080)](https://getbootstrap.com/)
 
 ## Краткое описание проекта:
 В этом проекте написаны тесты для двух приложений ya_news(pytest) и ya_note(unittest)  
