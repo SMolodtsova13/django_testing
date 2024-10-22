@@ -1,52 +1,47 @@
-# Django testing  
-## Если вы успели выполнить все домашние задания — ваш финальный проект готов.
-Перенесите тесты из ваших проектов в данный репозиторий (**django_testing**), который появился в вашем аккаунте.  
-В итоге должна получиться следующая структура репозитория:
-```
-Dev
- └── django_testing
-     ├── ya_news
-     │   ├── news
-     │   │   ├── fixtures/
-     │   │   ├── migrations/
-     │   │   ├── pytest_tests/   <- Директория с вашими тестами pytest для проекта ya_news
-     │   │   ├── __init__.py
-     │   │   ├── admin.py
-     │   │   ├── apps.py
-     │   │   ├── forms.py
-     │   │   ├── models.py
-     │   │   ├── urls.py
-     │   │   └── views.py
-     │   ├── templates/
-     │   ├── yanews/
-     │   ├── manage.py
-     │   └── pytest.ini
-     ├── ya_note
-     │   ├── notes
-     │   │   ├── migrations/
-     │   │   ├── tests/          <- Директория с вашими тестами unittest для проекта ya_note
-     │   │   ├── __init__.py
-     │   │   ├── admin.py
-     │   │   ├── apps.py
-     │   │   ├── forms.py
-     │   │   ├── models.py
-     │   │   ├── urls.py
-     │   │   └── views.py
-     │   ├── templates/
-     │   ├── yanote/
-     │   ├── manage.py
-     │   └── pytest.ini
-     ├── .gitignore
-     ├── README.md
-     ├── requirements.txt
-     └── structure_test.py
-```
+# Проект Django testing
 
-## После копирования тестов, написанных в ходе прохождения спринта, для проверки готовности проекта к сдаче необходимо выполнить 4 действия:
-1. Создать и активировать виртуальное окружение; установить зависимости из файла `requirements.txt`;
-2. Запустить скрипт для `run_tests.sh` из корневой директории проекта:
-```sh
-bash run_tests.sh
-```
+[![Python](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/-Django-464646?style=flat&logo=Django&logoColor=56C0C0&color=008080)](https://www.djangoproject.com/)
+[![Pytest](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://docs.pytest.org/en/stable/)
+[![Unittest](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://docs.python.org/3/library/unittest.html)
+[![HTML](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/HTML)
+[![CSS](https://img.shields.io/badge/-Django-464646?style=flat&logo=Django&logoColor=56C0C0&color=008080)](https://developer.mozilla.org/ru/docs/Web/CSS)
+[![Bootstrap](https://img.shields.io/badge/-Python-464646?style=flat&logo=Python&logoColor=56C0C0&color=008080)](https://getbootstrap.com/)
 
-**Если все проверки успешно выполнились, проект можно отправлять на ревью.**
+## Краткое описание проекта:
+В этом проекте написаны тесты для двух приложений ya_news(pytest) и ya_note(unittest)  
+ya_note - сервис для создания заметок  
+ya_news - сервис для просмотра новостей
+- Тестирование маршрутов
+- Тестирование контента
+- Тестирование логики приложения
+
+## Запустить проекты:
+- Склонируйте репозиторий на свой компьютер:
+```git clone git@github.com:SerVik888/django_testing.git```
+- Если у вас windows\
+    `python -m venv venv` -> создать виртуальное окружение\
+    `source venv/Scripts/activate` -> активировать виртуальное окружение\
+    `python -m pip install --upgrade pip` -> обновить установщик\
+    `pip install -r requirements.txt` -> установить зависимости из файла requirements.txt\
+    `cd ya_news` или `cd ya_note` -> переходим в папку\
+    `python manage.py migrate` -> выполнить миграции\
+    `python manage.py loaddata news/fixtures/news.json` -> загрузка данных из файла в БД(только для проекта ya_news)\
+    `python manage.py createsuperuser` -> создать суперпользователя\
+    `python manage.py runserver` -> запустить проект
+- После запуска, проект будет доступен по адресу http://127.0.0.1:8000/
+- Панель администратора находиться по адресу http://127.0.0.1:8000/admin/
+
+## Тестировать проекты:
+`source venv/Scripts/activate` -> активировать виртуальное окружение\
+`cd ya_news` или `cd ya_note` -> переходим в папку\
+`pytest` -> Выполнить команду из этой папки(смотря для какого приложения нужно выполнить тесты).
+
+##Тестировать тесты:
+`source venv/Scripts/activate` -> активировать виртуальное окружение\
+`run_tests.sh` -> Выполнить команду из корня проекта
+
+## Автор:  
+_Молодцова Светлана_  
+**telegram** _@smolodtsova_
+
