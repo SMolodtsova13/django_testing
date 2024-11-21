@@ -19,7 +19,7 @@ ya_news - сервис для просмотра новостей
 
 ## Запустить проекты:
 - Склонируйте репозиторий на свой компьютер:
-```git clone git@github.com:SerVik888/django_testing.git```
+```git clone https://github.com/SMolodtsova13/django_testing.git```
 - Если у вас windows\
     `python -m venv venv` -> создать виртуальное окружение\
     `source venv/Scripts/activate` -> активировать виртуальное окружение\
